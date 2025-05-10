@@ -1,6 +1,6 @@
 <?php
 
-declare(strict_types=1);
+declare(strict_types = 1);
 
 function getTransactionFiles(string $dirPath): array
 {
@@ -21,7 +21,7 @@ function getTransactionFiles(string $dirPath): array
 
 function getTransactions(string $fileName, ?callable $transactionHandler = null): array
 {
-    if (!file_exists($fileName)) {
+    if (! file_exists($fileName)) {
         trigger_error('File "' . $fileName . '" does not exist.', E_USER_ERROR);
     }
     $handle = fopen($fileName, 'r'); // open file for r=Reading
@@ -42,18 +42,17 @@ function extractTransaction(array $transactionRow): array
 {
     [$date, $checkNumber, $description, $amount] = $transactionRow;
 
-    $amount = (float) str_replace(['$', ','], '', $amount);
+    $amount = (float)str_replace(['$', ','], '', $amount);
 
     return [
-        'date' => $date,
+        'date'        => $date,
         'checkNumber' => $checkNumber,
         'description' => $description,
-        'amount' => $amount,
+        'amount'      => $amount,
     ];
 }
 
-/* IF CSV-files from another bank are formatter in other way 
-NOT IN: Date,Check #,Description,Amount 
+/* IF CSV-files from another bank are formatter in other way  NOT IN: Date,Check #,Description,Amount
 We write a new function below with its logic */
 // function extractTransactionFromBankY(){
 
@@ -68,11 +67,13 @@ function calculateTotals(array $transactions): array
     ];
     foreach ($transactions as $transaction) {
         $totals['netTotal'] += $transaction['amount'];
+
         if ($transaction['amount'] >= 0) {
             $totals['totalIncome'] += $transaction['amount'];
         } else {
             $totals['totalExpense'] += $transaction['amount'];
         }
     }
+
     return $totals;
 }
