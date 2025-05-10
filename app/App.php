@@ -16,6 +16,7 @@ function getTransactionFiles(string $dirPath): array
             // echo $file . "<br/>";
         }
     }
+
     return $files;
 }
 
@@ -24,9 +25,12 @@ function getTransactions(string $fileName, ?callable $transactionHandler = null)
     if (! file_exists($fileName)) {
         trigger_error('File "' . $fileName . '" does not exist.', E_USER_ERROR);
     }
+
     $handle = fopen($fileName, 'r'); // open file for r=Reading
-    $transactions = []; // Array for all transactions from csv-file
+
     fgetcsv($handle); // Trick to hide first line of CSV with Date,Check #,Description,Amount
+
+    $transactions = []; // Array for all transactions from csv-file
 
     while (($transaction = fgetcsv($handle)) !== false) {
         if ($transactionHandler !== null) {
@@ -42,7 +46,7 @@ function extractTransaction(array $transactionRow): array
 {
     [$date, $checkNumber, $description, $amount] = $transactionRow;
 
-    $amount = (float)str_replace(['$', ','], '', $amount);
+    $amount = (float) str_replace(['$', ','], '', $amount);
 
     return [
         'date'        => $date,
@@ -60,11 +64,8 @@ We write a new function below with its logic */
 
 function calculateTotals(array $transactions): array
 {
-    $totals = [
-        'totalIncome' => 0,
-        'totalExpense' => 0,
-        'netTotal' => 0
-    ];
+    $totals = ['netTotal' => 0, 'totalIncome' => 0, 'totalExpense' => 0];
+
     foreach ($transactions as $transaction) {
         $totals['netTotal'] += $transaction['amount'];
 

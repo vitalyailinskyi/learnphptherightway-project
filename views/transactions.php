@@ -34,27 +34,25 @@
                 </tr>
             </thead>
             <tbody>
-                <?php if (!empty($transactions)) :
-                    foreach ($transactions as $transaction) : ?>
-                <tr>
-                    <td><?= formatDate($transaction['date']) ?></td>
-                    <td><?= $transaction['checkNumber'] ?></td>
-                    <td><?= $transaction['description'] ?></td>
-                    <td>
-                        <?php
-                            $amount = formatDollarAmount($transaction['amount']);
-                            if ($transaction['amount'] < 0): ?>
-                        <span style="color: red;"><?= $amount ?></span>
-                        <?php elseif ($transaction['amount'] > 0) : ?>
-                        <span style="color: green;"><?= $amount ?></span>
-                        <?php else: ?>
-                        <?= $amount ?>
-                        <?php endif ?>
-                    </td>
-                </tr>
-                <?php
-                    endforeach;
-                    endif; ?>
+                <?php if (! empty($transactions)): ?>
+                    <?php foreach($transactions as $transaction): ?>
+                        <tr>
+                            <td><?= formatDate($transaction['date']) ?></td>
+                            <td><?= $transaction['checkNumber'] ?></td>
+                            <td><?= $transaction['description'] ?></td>
+                            <td>
+                                <?php $amount = formatDollarAmount($transaction['amount']); ?>
+                                <?php if ($transaction['amount'] < 0): ?>
+                                <span style="color: red;"><?= $amount ?></span>
+                                <?php elseif ($transaction['amount'] > 0) : ?>
+                                <span style="color: green;"><?= $amount ?></span>
+                                <?php else: ?>
+                                <?= $amount ?>
+                                <?php endif ?>
+                            </td>
+                        </tr>
+                    <?php endforeach; ?>
+                <?php endif; ?>
             </tbody>
             <tfoot>
                 <tr>

@@ -9,7 +9,7 @@
 
 ---
 #### Related Video
-https://youtu.be/oXcX4ucj32M
+https://youtu.be/MOsolLaVnsI
 
 ---
 #### Course Playlist
