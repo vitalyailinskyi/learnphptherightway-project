@@ -43,16 +43,20 @@
                             <td>
                                 <?php $amount = formatDollarAmount($transaction['amount']); ?>
                                 <?php if ($transaction['amount'] < 0): ?>
-                                <span style="color: red;"><?= $amount ?></span>
+                                    <span style="color: red;">
+                                        <?= $amount ?>
+                                    </span>
                                 <?php elseif ($transaction['amount'] > 0) : ?>
-                                <span style="color: green;"><?= $amount ?></span>
+                                    <span style="color: green;">
+                                        <?= $amount ?>
+                                    </span>
                                 <?php else: ?>
-                                <?= $amount ?>
+                                    <?= $amount ?>
                                 <?php endif ?>
                             </td>
                         </tr>
-                    <?php endforeach; ?>
-                <?php endif; ?>
+                    <?php endforeach ?>
+                <?php endif ?>
             </tbody>
             <tfoot>
                 <tr>
