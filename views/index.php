@@ -10,4 +10,9 @@
     <body>
         Home Page
     </body>
+    <br/>
+    <form action="/upload" method="post" enctype="multipart/form-data" id="receipt">
+        <input type="file" name="receipt">
+        <button type="submit" name="receipt">Upload</button>
+    </form>
 </html>

@@ -12,4 +12,9 @@ class HomeController
     {
         return View::make('index');
     }
+
+    public function upload(): View
+    {
+        return View::make('transactions');
+    }
 }
