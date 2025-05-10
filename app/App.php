@@ -1,6 +1,6 @@
 <?php
 
-declare(strict_types = 1);
+declare(strict_types=1);
 
 function getTransactionFiles(string $dirPath): array
 {
@@ -11,32 +11,30 @@ function getTransactionFiles(string $dirPath): array
             continue;
         }
 
-        $files[] = $dirPath . $file;
+        if (pathinfo($file)['extension'] === 'csv') {
+            $files[] = $dirPath . $file;
+            // echo $file . "<br/>";
+        }
     }
-
     return $files;
 }
 
 function getTransactions(string $fileName, ?callable $transactionHandler = null): array
 {
-    if (! file_exists($fileName)) {
+    if (!file_exists($fileName)) {
         trigger_error('File "' . $fileName . '" does not exist.', E_USER_ERROR);
     }
+    $handle = fopen($fileName, 'r'); // open file for r=Reading
+    $transactions = []; // Array for all transactions from csv-file
+    fgetcsv($handle); // Trick to hide first line of CSV with Date,Check #,Description,Amount
 
-    $file = fopen($fileName, 'r');
-
-    fgetcsv($file);
-
-    $transactions = [];
-
-    while (($transaction = fgetcsv($file)) !== false) {
+    while (($transaction = fgetcsv($handle)) !== false) {
         if ($transactionHandler !== null) {
             $transaction = $transactionHandler($transaction);
         }
-
-        $transactions[] = $transaction;
+        $transactions[] = $transaction; // Add lines from csv-file as new arrays into $transactions-array.
     }
-
+    fclose($handle);
     return $transactions;
 }
 
@@ -47,26 +45,34 @@ function extractTransaction(array $transactionRow): array
     $amount = (float) str_replace(['$', ','], '', $amount);
 
     return [
-        'date'        => $date,
+        'date' => $date,
         'checkNumber' => $checkNumber,
         'description' => $description,
-        'amount'      => $amount,
+        'amount' => $amount,
     ];
 }
 
+/* IF CSV-files from another bank are formatter in other way 
+NOT IN: Date,Check #,Description,Amount 
+We write a new function below with its logic */
+// function extractTransactionFromBankY(){
+
+// }
+
 function calculateTotals(array $transactions): array
 {
-    $totals = ['netTotal' => 0, 'totalIncome' => 0, 'totalExpense' => 0];
-
+    $totals = [
+        'totalIncome' => 0,
+        'totalExpense' => 0,
+        'netTotal' => 0
+    ];
     foreach ($transactions as $transaction) {
         $totals['netTotal'] += $transaction['amount'];
-
         if ($transaction['amount'] >= 0) {
             $totals['totalIncome'] += $transaction['amount'];
         } else {
             $totals['totalExpense'] += $transaction['amount'];
         }
     }
-
     return $totals;
 }
