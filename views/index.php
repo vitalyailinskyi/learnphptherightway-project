@@ -11,8 +11,8 @@
         Home Page
     </body>
     <br/>
-    <form action="/upload" method="post" enctype="multipart/form-data" id="receipt">
-        <input type="file" name="receipt">
+    <form action="/transactions/upload" method="post" enctype="multipart/form-data" id="receipt">
+        <input type="file" name="receipt[]" multiple>
         <button type="submit" name="receipt">Upload</button>
     </form>
 </html>
